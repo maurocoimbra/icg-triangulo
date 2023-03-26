@@ -8,45 +8,39 @@ using namespace std;
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
-    //*************************************************************************
-    // Chame aqui as funções do mygl.h
-    //*************************************************************************
-    // PutPixel();
-    
-    // DrawLine(100, 0, 0, 100);
-    // DrawLine(100, 100, 0, 0);
-    // DrawLine(, 100, 0, 0);
-    Pxl v1(100, 100);
-    Pxl v2(100, 200);
-    Pxl v3(300, 400);
+    srand(time(NULL));
+
+    Pxl v1(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
+    Pxl v2(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
+    Pxl v3(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
     DrawTriangle(v1, v2, v3);
 }
 
-void PutPixel(int x, int y, int r = 255, int g = 255, int b = 255) {
+void PutPixel(Pxl p) {
     // Escreve um pixel de cor (r,g,b) na posicao (x,y) da tela:
-    FBptr[4*IMAGE_WIDTH*y + 4*x] = r; // componente R
-    FBptr[4*IMAGE_WIDTH*y + 4*x + 1] = g;   // componente G
-    FBptr[4*IMAGE_WIDTH*y + 4*x + 2] = b;   // componente B
-    FBptr[4*IMAGE_WIDTH*y + 4*x + 3] = 255; // componente A
+    FBptr[4*IMAGE_WIDTH*p.y + 4*p.x] = p.r; // componente R
+    FBptr[4*IMAGE_WIDTH*p.y + 4*p.x + 1] = p.g;   // componente G
+    FBptr[4*IMAGE_WIDTH*p.y + 4*p.x + 2] = p.b;   // componente B
+    FBptr[4*IMAGE_WIDTH*p.y + 4*p.x + 3] = 255; // componente A
 }
 
-void DrawLine(int xi, int yi, int xf, int yf) {
+void DrawLine(Pxl pi, Pxl pf) {
 
     int dx, dy, x, y, t, e, incrementX, incrementY;
     
-    x = xi;
-    y = yi;
+    x = pi.x;
+    y = pi.y;
 
-    dy = abs(yf - yi);
-    dx = abs(xf - xi);
-    incrementX = xi > xf ? -1 : 1;
-    incrementY = yi > yf ? -1 : 1;
+    dy = abs(pf.y - pi.y);
+    dx = abs(pf.x - pi.x);
+    incrementX = pi.x > pf.x ? -1 : 1;
+    incrementY = pi.y > pf.y ? -1 : 1;
     
     e = 0;
 
     if (dx > dy){
-        while (x != xf) {
-                PutPixel(x, y);
+        while (x != pf.x) {
+                PutPixel(Pxl(x, y));
                 x += incrementX;
                 e += 2*dy;
                 if (e >= dx) {
@@ -56,8 +50,8 @@ void DrawLine(int xi, int yi, int xf, int yf) {
             }
     }
     else {
-        while (y != yf) {
-            PutPixel(x, y);
+        while (y != pf.y) {
+            PutPixel(Pxl(x, y));
             y += incrementY;
             e += 2*dx;
             if (e >= dy) {
@@ -69,7 +63,7 @@ void DrawLine(int xi, int yi, int xf, int yf) {
 }
 
 void DrawTriangle(Pxl v1, Pxl v2, Pxl v3) {
-    DrawLine(v1.x, v1.y, v2.x, v2.y);
-    DrawLine(v1.x, v1.y, v3.x, v3.y);
-    DrawLine(v2.x, v2.y, v3.x, v3.y);
+    DrawLine(v1, v2);
+    DrawLine(v1, v3);
+    DrawLine(v2, v3);
 }
