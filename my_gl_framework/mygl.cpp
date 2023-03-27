@@ -10,9 +10,10 @@ void MyGlDraw(void)
 {
     srand(time(NULL));
 
-    Pxl v1(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
-    Pxl v2(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
-    Pxl v3(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH);
+    int r = rand()%256, g = rand()%256, b = rand()%256;
+    Pxl v1(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH, r, g, b);
+    Pxl v2(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH, r, g, b);
+    Pxl v3(rand()%IMAGE_WIDTH, rand()%IMAGE_WIDTH, r, g, b);
     DrawTriangle(v1, v2, v3);
 }
 
@@ -27,7 +28,8 @@ void PutPixel(Pxl p) {
 void DrawLine(Pxl pi, Pxl pf) {
 
     int dx, dy, x, y, t, e, incrementX, incrementY;
-    
+    int r = pi.r, g = pi.g, b = pi.b;
+
     x = pi.x;
     y = pi.y;
 
@@ -40,7 +42,7 @@ void DrawLine(Pxl pi, Pxl pf) {
 
     if (dx > dy){
         while (x != pf.x) {
-                PutPixel(Pxl(x, y));
+                PutPixel(Pxl(x, y, r, g, b));
                 x += incrementX;
                 e += 2*dy;
                 if (e >= dx) {
@@ -51,7 +53,7 @@ void DrawLine(Pxl pi, Pxl pf) {
     }
     else {
         while (y != pf.y) {
-            PutPixel(Pxl(x, y));
+            PutPixel(Pxl(x, y, r, g, b));
             y += incrementY;
             e += 2*dx;
             if (e >= dy) {
